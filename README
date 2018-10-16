@@ -1,0 +1,14 @@
+# For MAVEN
+mvn sonar:sonar \
+  -Dsonar.host.url=http://127.0.0.1:9000 \
+  -Dsonar.login=d75921637a124e97a7b8daa3fd733d9b12b1f7be
+
+
+# For Gradle
+plugins {
+  id "org.sonarqube" version "2.6"
+}
+
+./gradlew sonarqube \
+  -Dsonar.host.url=http://127.0.0.1:9000 \
+  -Dsonar.login=d75921637a124e97a7b8daa3fd733d9b12b1f7be
