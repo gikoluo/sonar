@@ -1,0 +1,40 @@
+FROM alpine
+MAINTAINER LuoChunhui "lch@jfpal.com"
+
+# create plugin download location; so we can copy them later when SonarQube is started
+#see sonarqube
+ENV PLUGIN_DOWNLOAD_LOCATION /opt/sonarqube/extensions/plugins
+RUN mkdir -p $PLUGIN_DOWNLOAD_LOCATION
+
+RUN mkdir -p /var/downloads/
+WORKDIR /var/downloads/
+
+# download plugins from:
+# - http://downloads.sonarsource.com/plugins/org/codehaus/sonar-plugins/
+# - https://sonarsource.bintray.com/Distribution/
+# - https://github.com/SonarQubeCommunity/
+
+#AUTH
+RUN wget -q https://binaries.sonarsource.com/Distribution/sonar-auth-saml-plugin/sonar-auth-saml-plugin-1.1.0.181.jar
+
+#JAVA: Java, Groovy
+RUN wget -q https://binaries.sonarsource.com/Distribution/sonar-java-plugin/sonar-java-plugin-5.8.0.15699.jar
+RUN wget -q https://github.com/pmayweg/sonar-groovy/releases/download/1.5/sonar-groovy-plugin-1.5.jar?nocache
+
+#Python 
+RUN wget -q https://binaries.sonarsource.com/Distribution/sonar-python-plugin/sonar-python-plugin-1.10.0.2131.jar
+
+#WEB: HTML, JS, CSS
+RUN wget -q https://binaries.sonarsource.com/Distribution/sonar-html-plugin/sonar-html-plugin-3.0.1.1444.jar
+RUN wget -q https://github.com/SonarSource/SonarJS/releases/download/5.0.0.6962/sonar-javascript-plugin-5.0.0.6962.jar
+RUN wget -q https://binaries.sonarsource.com/Distribution/sonar-css-plugin/sonar-css-plugin-1.0.2.611.jar
+
+#Extensions: git, findbugs, timeline, sonargraph
+#RUN wget -q http://downloads.sonarsource.com/plugins/org/codehaus/sonar-plugins/sonar-scm-git-plugin/1.0/sonar-scm-git-plugin-1.0.jar
+RUN wget -q https://github.com/spotbugs/sonar-findbugs/releases/download/3.8.0/sonar-findbugs-plugin-3.8.0.jar?nocache
+
+#LANG
+#RUN wget -q https://github.com/SonarQubeCommunity/sonar-l10n-zh/releases/download/sonar-l10n-zh-plugin-1.23/sonar-l10n-zh-plugin-1.23.jar
+
+CMD ls -l $PLUGIN_DOWNLOAD_LOCATION/ && cp /var/downloads/*.jar $PLUGIN_DOWNLOAD_LOCATION/ && echo "finished download. exists! " && exit 0
+
